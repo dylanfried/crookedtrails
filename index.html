@@ -73,9 +73,7 @@
 
     // grid colors
     // we will set each cell to have a specific color for whenever it is on
-    grid_colors = [
-
-    ]
+    let gridColors = readImage('https://lh3.googleusercontent.com/d/1KZrYUDnMWZd_Mp6O0J1rAj4lBfpnHgWY');
 
     // Set initial grid state:
     initialGridState = [
@@ -142,6 +140,9 @@
             for (let j = 0; j < numCols; j++) {
                 const cell = document.createElement('div');
                 cell.className = `cell ${grid[i][j] ? 'alive' : 'dead'}`;
+                if (gridColors != null) {
+                    cell.style = `background-color: ${gridColors[i][j]}`;
+                }
                 cell.addEventListener('click', () => toggleCell(i, j));
                 gridContainer.appendChild(cell);
             }
@@ -155,7 +156,45 @@
 
     // Initial rendering and start the game loop
     renderGrid();
-    //setInterval(updateGrid, 500);
+    setInterval(updateGrid, 500);
+
+
+
+
+
+    
+    function readImage(imageURL) {
+        const img = new Image();
+        img.crossOrigin = "Anonymous"; // Enable cross-origin resource sharing
+        img.src = imageURL;
+
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+
+            const pixelData = [];
+
+            for (let y = 0; y < img.height; y++) {
+                const row = [];
+                for (let x = 0; x < img.width; x++) {
+                    const pixel = ctx.getImageData(x, y, 1, 1).data;
+                    const hexValue = rgbToHex(pixel[0], pixel[1], pixel[2]);
+                    row.push(hexValue);
+                }
+                pixelData.push(row);
+            }
+
+            console.log(pixelData);
+            gridColors = pixelData;
+        };
+    }
+
+    function rgbToHex(r, g, b) {
+        return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
 </script>
 
 </body>
