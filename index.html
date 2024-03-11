@@ -21,17 +21,15 @@
         }
 
         #grid-container {
-            width: 900px;
+            width: 720px;
             display: grid;
             grid-template-columns: repeat(auto-fill, 4px);
-            gap: 1px;
-            row-gap:0px;
         }
 
         .cell {
             width: 4px;
             height: 4px;
-            border: 1px solid #ccc;
+            /* border: 1px solid #ccc; */
             /* background-color: white; */
         }
 
@@ -70,6 +68,7 @@
     const gridContainer = document.getElementById('grid-container');
 
     let grid = createEmptyGrid();
+    let gridCount = Array.from({ length: numRows }, () => Array(numCols).fill(0.01));
 
     // grid colors
     // we will set each cell to have a specific color for whenever it is on
@@ -144,15 +143,16 @@
             [3,3],
         ]
     ]
-    for (let numShapes = 0; numShapes < 5; numShapes++) {
+    for (let numShapes = 0; numShapes < 10; numShapes++) {
         // pick shape at random from library of shapes
         let shape = shapes[Math.floor(Math.random()*shapes.length)];
         // choose random place to place shape on the grid
-        let xCoordinate = Math.floor(Math.random()*numCols);
-        let yCoordinate = Math.floor(Math.random()*numRows);
+        let xCoordinate = Math.floor(Math.random()*(numCols-20));
+        let yCoordinate = Math.floor(Math.random()*(numRows-20));
         // Add this starting place to the coordinates in the shape and add to the grid
         for (let i = 0; i < shape.length; i++) {
             grid[shape[i][1]+yCoordinate][shape[i][0]+xCoordinate] = true;
+            gridCount[shape[i][1]+yCoordinate][shape[i][0]+xCoordinate] = Math.min(gridCount[shape[i][1]+yCoordinate][shape[i][0]+xCoordinate] + 0.02,0.8);
         }
     }
 
@@ -170,6 +170,9 @@
                     newGrid[i][j] = neighbors === 2 || neighbors === 3;
                 } else {
                     newGrid[i][j] = neighbors === 3;
+                }
+                if (newGrid[i][j]) {
+                    gridCount[i][j] = Math.min(gridCount[i][j]+0.02,0.8);
                 }
             }
         }
@@ -206,11 +209,11 @@
                 const cell = document.createElement('div');
                 cell.className = `cell ${grid[i][j] ? 'alive' : 'dead'}`;
                 if (gridColors != null && grid[i][j]) {
-                    cell.style = `background-color: ${gridColors[i][j]}`;
-                } else {
-                    cell.style = "background-color: white";
+                    cell.style = `background-color: ${gridColors[i][j]}; opacity: 1;`;
+                } else if (gridColors != null) {
+                    cell.style = `background-color: ${gridColors[i][j]}; opacity: ${gridCount[i][j]};`;
                 }
-                cell.addEventListener('mouseout', () => toggleCell(i, j));
+                //cell.addEventListener('mouseout', () => toggleCell(i, j));
                 gridContainer.appendChild(cell);
             }
         }
@@ -223,7 +226,7 @@
 
     // Initial rendering and start the game loop
     renderGrid();
-    setInterval(updateGrid, 100);
+    setInterval(updateGrid, 20);
 
 
 
