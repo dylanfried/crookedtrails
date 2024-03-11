@@ -69,6 +69,7 @@
 
     let grid = createEmptyGrid();
     let gridCount = Array.from({ length: numRows }, () => Array(numCols).fill(0.01));
+    let generationCount = 0;
 
     // grid colors
     // we will set each cell to have a specific color for whenever it is on
@@ -162,6 +163,7 @@
 
     function updateGrid() {
         const newGrid = createEmptyGrid();
+        generationCount = generationCount + 1;
 
         for (let i = 0; i < numRows; i++) {
             for (let j = 0; j < numCols; j++) {
@@ -173,6 +175,21 @@
                 }
                 if (newGrid[i][j]) {
                     gridCount[i][j] = Math.min(gridCount[i][j]+0.02,0.8);
+                }
+            }
+        }
+
+        if (generationCount % 300 == 0) {
+            for (let numShapes = 0; numShapes < 3; numShapes++) {
+                // add a shape in
+                let shape = shapes[Math.floor(Math.random()*shapes.length)];
+                // choose random place to place shape on the grid
+                let xCoordinate = Math.floor(Math.random()*(numCols-20));
+                let yCoordinate = Math.floor(Math.random()*(numRows-20));
+                // Add this starting place to the coordinates in the shape and add to the grid
+                for (let i = 0; i < shape.length; i++) {
+                    newGrid[shape[i][1]+yCoordinate][shape[i][0]+xCoordinate] = true;
+                    gridCount[shape[i][1]+yCoordinate][shape[i][0]+xCoordinate] = Math.min(gridCount[shape[i][1]+yCoordinate][shape[i][0]+xCoordinate] + 0.02,0.8);
                 }
             }
         }
