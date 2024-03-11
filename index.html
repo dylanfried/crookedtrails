@@ -41,7 +41,7 @@
         #text-container {
             padding: 20px;
             overflow-x: scroll;
-            height: 200px;
+            height: 300px;
             column-width: 400px;
         }
     </style>
@@ -53,9 +53,13 @@
 </div>
 
 <div id="text-container">
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt justo et justo auctor, ac dictum augue varius. Nullam bibendum, sem nec tristique volutpat, justo leo ullamcorper massa, sit amet bibendum lacus ex vel urna. Fusce vel dapibus eros, vel rhoncus libero. Vivamus vel metus eu lacus commodo luctus. Integer vitae tristique arcu. Aliquam auctor risus ut bibendum efficitur. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut ac orci at tellus gravida elementum. Sed euismod luctus urna, nec feugiat nulla volutpat vel. Vestibulum laoreet odio at urna interdum vulputate.</p>
-    <p>Curabitur ac ligula vel neque varius accumsan. Sed consequat diam at sem laoreet, vel commodo elit semper. Phasellus sed mauris sit amet sapien congue rhoncus. Quisque efficitur nunc eu erat suscipit cursus. Ut fermentum, est in tincidunt pulvinar, odio velit aliquam nunc, vitae consequat elit odio eu quam. Curabitur in vestibulum metus. Duis id felis ut eros lacinia tempus vel et purus. Nam varius odio vel justo fermentum, vitae pellentesque arcu efficitur.</p>
-    <p>Etiam nec semper mauris. Morbi vitae ligula vel urna feugiat imperdiet. Nullam eu urna in nunc hendrerit rhoncus eu id nulla. Sed tristique urna at lectus aliquam, ut ultrices elit rhoncus. Nulla facilisi. Aliquam eu mauris quis turpis blandit ultricies a id elit. Curabitur eu eros vel quam aliquet bibendum ut a erat. Aenean nec lacinia ligula. Fusce eget varius augue, vel ultricies libero.</p>
+    <p style="margin-top:0px;">May your trails be crooked, winding, lonesome, dangerous, leading to the most amazing view. May your mountains rise into and above the clouds. May your rivers flow without end, meandering through pastoral valleys tinkling with bells, past temples and castles and poets towers into a dark primeval forest where tigers belch and monkeys howl, through miasmal and mysterious swamps and down into a desert of red rock, blue mesas, domes and pinnacles and grottos of endless stone, and down again into a deep vast ancient unknown chasm where bars of sunlight blaze on profiled cliffs, where deer walk across the white sand beaches, where storms come and go as lightning clangs upon the high crags, where something strange and more beautiful and more full of wonder than your deepest dreams waits for you -- beyond that next turning of the canyon walls.</p>
+    <p>- Edward Abbey, <span style="font-style:italic;">desert solitaire</span></p>
+    <p>i read this quote and i think of you. i think of the many nights spent in the vw. on the windy shores of lake powell with lucky's ears blowing sideways in the wind. sitting in trees trying to avoid the idea of a book report. walking through the pygmy forest in yosemite holding your hand. the feel of the (now-retro, then-contemporary) fleeces we would wear in deep greens and bright purples. i think of fried green tomatoes in boulder and reading the dragon riders of pern together. i think of the bright green young cottonwood leaves against the dark red walls at that turnoff on the left partway down the burr trail. and crazy rainstorms with our canoes pulled up on the sandbars. </p>
+    <p>and i think of winding trails far far from canyon walls. do you remember our hike in costa rica? maybe halfway through a magical and first-that-i-remember trip for the two of us far away from home. we were on the pacific coast, probably looking for monkeys and hiking through a national park. we came to a split in the trail - to the right (and towards the sound of water on the cliffs) the path was blocked with a “cerrado” sign (a cosmic reference to our collections of stop signs?). i started walking left and you started climbing over barriers towards the sound of the waves. sometimes i wonder if it's because you're the smartest person that i know that you're able to move through the world one step ahead of the rules. i'm still learning from you how to find that which is strange and more beautiful and more full of wonder. i'm thankful every day for this lesson.</p>
+    <p>i've always been drawn to the idea of emergence from the winding roads. patterns and beauty that come out of the randomness of initial state and a simple set of rules (that we follow or that we break). walking these trails with you makes me think of conway's game of life, so i made you this weird card. this initial state of the mountains set on a path that we can't predict, following the simple and axiomatic rules. the basic things of living and breathing and moving rather than the trappings of "shoulds". </p>
+    <p>watching these swirling patterns brings me back to reading david brin's glory season and the characters of Stratoin society playing their own version of conway's game of life. i don't remember you giving it to me, but as the one beacon and bastion of sci-fi in my young life, it must have been you. i've kept all of the novels that you introduced me to in different parts of my mind, often returning to them (whether physically or with my eyes closed) to re-imagine the characters and stories and arcs. i’m sure that my memory of soaring spires, spaceships, and long-fingered humanoids leaning over their board of the game of life aren't quite accurate - but i guess that's kind of the point. once you gave me the book and i brought it into my consciousness, it became my own story to follow and build.</p>
+    <p>so, happy birthday. happy birthday to you. happy birthday to the person i know who is smart enough to figure out what the rules are that we’re playing by and break them. thank you for holding my hand while you do it. i love you more than i can ever express.</p>
 </div>
 
 <script>
@@ -65,6 +69,19 @@
     const gridContainer = document.getElementById('grid-container');
 
     let grid = createEmptyGrid();
+
+    // Set initial grid state:
+    initialGridState = [
+        [0,1],
+        [1,2],
+        [2,0],
+        [2,1],
+        [2,2]
+    ]
+    for (let i = 0; i < initialGridState.length; i++) {
+        grid[initialGridState[i][0]][initialGridState[i][1]] = true;
+    }
+    console.log(grid);
 
     function createEmptyGrid() {
         return Array.from({ length: numRows }, () => Array(numCols).fill(false));
@@ -128,7 +145,7 @@
 
     // Initial rendering and start the game loop
     renderGrid();
-    setInterval(updateGrid, 2000);
+    setInterval(updateGrid, 500);
 </script>
 
 </body>
