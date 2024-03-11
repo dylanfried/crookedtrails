@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conway's Game of Life</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 50vh;
+        }
+
+        #grid-container {
+            width: 800px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 8px);
+            gap: 1px;
+        }
+
+        .cell {
+            width: 8px;
+            height: 8px;
+            border: 1px solid #ccc;
+            background-color: white;
+        }
+
+        .cell.alive {
+            background-color: black;
+        }
+
+        #text-container {
+            padding: 20px;
+            overflow-x: scroll;
+            height: 200px;
+            column-width: 400px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="grid-container"></div>
+</div>
+
+<div id="text-container">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt justo et justo auctor, ac dictum augue varius. Nullam bibendum, sem nec tristique volutpat, justo leo ullamcorper massa, sit amet bibendum lacus ex vel urna. Fusce vel dapibus eros, vel rhoncus libero. Vivamus vel metus eu lacus commodo luctus. Integer vitae tristique arcu. Aliquam auctor risus ut bibendum efficitur. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut ac orci at tellus gravida elementum. Sed euismod luctus urna, nec feugiat nulla volutpat vel. Vestibulum laoreet odio at urna interdum vulputate.</p>
+    <p>Curabitur ac ligula vel neque varius accumsan. Sed consequat diam at sem laoreet, vel commodo elit semper. Phasellus sed mauris sit amet sapien congue rhoncus. Quisque efficitur nunc eu erat suscipit cursus. Ut fermentum, est in tincidunt pulvinar, odio velit aliquam nunc, vitae consequat elit odio eu quam. Curabitur in vestibulum metus. Duis id felis ut eros lacinia tempus vel et purus. Nam varius odio vel justo fermentum, vitae pellentesque arcu efficitur.</p>
+    <p>Etiam nec semper mauris. Morbi vitae ligula vel urna feugiat imperdiet. Nullam eu urna in nunc hendrerit rhoncus eu id nulla. Sed tristique urna at lectus aliquam, ut ultrices elit rhoncus. Nulla facilisi. Aliquam eu mauris quis turpis blandit ultricies a id elit. Curabitur eu eros vel quam aliquet bibendum ut a erat. Aenean nec lacinia ligula. Fusce eget varius augue, vel ultricies libero.</p>
+</div>
+
+<script>
+    // Conway's Game of Life logic
+    const numRows = 30;
+    const numCols = 89;
+    const gridContainer = document.getElementById('grid-container');
+
+    let grid = createEmptyGrid();
+
+    function createEmptyGrid() {
+        return Array.from({ length: numRows }, () => Array(numCols).fill(false));
+    }
+
+    function updateGrid() {
+        const newGrid = createEmptyGrid();
+
+        for (let i = 0; i < numRows; i++) {
+            for (let j = 0; j < numCols; j++) {
+                const neighbors = countNeighbors(i, j);
+                if (grid[i][j]) {
+                    newGrid[i][j] = neighbors === 2 || neighbors === 3;
+                } else {
+                    newGrid[i][j] = neighbors === 3;
+                }
+            }
+        }
+
+        grid = newGrid;
+        renderGrid();
+    }
+
+    function countNeighbors(row, col) {
+        const offsets = [-1, 0, 1];
+        let count = 0;
+
+        for (const i of offsets) {
+            for (const j of offsets) {
+                if (i === 0 && j === 0) continue;
+
+                const newRow = row + i;
+                const newCol = col + j;
+
+                if (newRow >= 0 && newRow < numRows && newCol >= 0 && newCol < numCols) {
+                    count += grid[newRow][newCol] ? 1 : 0;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    function renderGrid() {
+        gridContainer.innerHTML = '';
+
+        for (let i = 0; i < numRows; i++) {
+            for (let j = 0; j < numCols; j++) {
+                const cell = document.createElement('div');
+                cell.className = `cell ${grid[i][j] ? 'alive' : 'dead'}`;
+                cell.addEventListener('click', () => toggleCell(i, j));
+                gridContainer.appendChild(cell);
+            }
+        }
+    }
+
+    function toggleCell(row, col) {
+        grid[row][col] = !grid[row][col];
+        renderGrid();
+    }
+
+    // Initial rendering and start the game loop
+    renderGrid();
+    setInterval(updateGrid, 2000);
+</script>
+
+</body>
+</html>
